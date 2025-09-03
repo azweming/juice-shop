@@ -6,7 +6,6 @@ pipeline {
         PROJECT_KEY  = "fUjCYsgSErEDdMizlpmUgihQulMbEFTB"
         GIT_URL = scm.getUserRemoteConfigs()[0].getUrl()
         GITHUB_REPOSITORY = "${GIT_URL.tokenize('/').takeRight(2).join('/').replaceAll(/\.git$/, '')}"
-        GITHUB_REF_NAME = "${env.BRANCH_NAME}"
     }
 
     stages {
@@ -20,7 +19,7 @@ pipeline {
                           armourzero/pipe-scan:latest \
                           --apikey="$AZ_API_KEY" \
                           --projectkey="$PROJECT_KEY" \
-                          --branch="\$GITHUB_REF_NAME" \
+                          --branch="$GIT_BRANCH" \
                           --repo="\$GITHUB_REPOSITORY"
                     '''
                 }
