@@ -4,6 +4,9 @@ pipeline {
     environment {
         AZ_API_KEY   = credentials('AZ_TOKEN')
         PROJECT_KEY  = "fUjCYsgSErEDdMizlpmUgihQulMbEFTB"
+        GIT_URL = scm.getUserRemoteConfigs()[0].getUrl()
+        GITHUB_REPOSITORY = "${GIT_URL.tokenize('/').takeRight(2).join('/').replaceAll(/\.git$/, '')}"
+        GITHUB_REF_NAME = "${env.BRANCH_NAME}"
     }
 
     stages {
@@ -17,8 +20,8 @@ pipeline {
                           armourzero/pipe-scan:latest \
                           --apikey="$AZ_API_KEY" \
                           --projectkey="$PROJECT_KEY" \
-                          --branch="$GIT_BRANCH" \
-                          --repo="$GIT_URL"
+                          --branch="\$GITHUB_REF_NAME" \
+                          --repo="\$GITHUB_REPOSITORY"
                     '''
                 }
             }
